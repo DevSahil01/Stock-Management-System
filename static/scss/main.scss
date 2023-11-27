@@ -1,0 +1,20 @@
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+// Required
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+@import "../node_modules/bootstrap/scss/root";
+
+
+$focus-ring-color:blue;
+
+// $primary:green;
+
+// $theme-colors: (
+//   "primary": green,
+//   "danger": #ff4136
+// );
+$theme-colors: (
+  "info":       $gray-700,
+) !default;
+$pagination-color : black !default;

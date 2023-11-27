@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerts Section</title>
+    <link rel="stylesheet" href="../static/css/main.min.css">
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body class="bg-light">
+    <div class="d-flex" >
+      {% include 'mainSidebar.html'  %}
+        <div class="w-100 bg-white m-2 overflow overflow-auto vh-100  ">
+            <h4 class="text-center">Creditor Alerts</h4>
+            <table class="table w-75 mx-auto table-bordered mb-4">
+                <thead>
+                  <tr>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Supplier Name</th>
+                    <th scope="col">Mobile No</th>
+                    <th scope="col">Purchase Date</th>
+                    <th scope="col">Payable</th>
+                    <th scope="col">Due Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for alerts in creditoralerts %}
+                    <tr>
+                        {% for alert in alerts %}
+                        <td scope="row">{{alert}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  
+                </tbody>
+              </table>
+              <h4 class="text-center">Debtor Alerts</h4>
+              <table class="table w-75 mx-auto table-bordered mb-4">
+                  <thead>
+                    <tr>
+                      <th scope="col">Product Name</th>
+                      <th scope="col">Customer Name</th>
+                      <th scope="col">Mobile No</th>
+                      <th scope="col">Purchase Date</th>
+                      <th scope="col">Receivable</th>
+                      <th scope="col">Due Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for alerts in debtoralerts %}
+                      <tr>
+                          {% for alert in alerts %}
+                          <td scope="row">{{alert}}</td>
+                          {% endfor %}
+                      </tr>
+                      {% endfor %}
+                    
+                  </tbody>
+                </table>
+                
+                <h4 class="text-center">Service Sales Alerts</h4>
+                <table class="table w-75 mx-auto table-bordered mb-4">
+                    <thead>
+                      <tr>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Mobile No</th>
+                        <th scope="col">Purchase Date</th>
+                        <th scope="col">Receivable</th>
+                        <th scope="col">Due Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for alerts in servicesalesAlerts %}
+                        <tr>
+                            {% for alert in alerts %}
+                            <td scope="row">{{alert}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                      
+                    </tbody>
+                  </table>
+        </div>
+    </div>
+</body>
+</html>

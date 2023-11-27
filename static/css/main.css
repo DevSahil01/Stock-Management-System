@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+body{
+    background-color: #F5F5F5;
+    font-family: 'Inter', sans-serif;
+}
+.login-bx{
+    background-color: white;
+    margin: auto;
+    display: flex;
+    width: 38%;
+    flex-direction: column;
+    margin-top: 8%;
+    text-align: center;
+    align-items: center;
+    padding: 10px;
+}
+.login-bx h2{
+    color: #00D053;
+    font-size:xx-large;
+    /* background-color: black; */
+    margin: 0;
+}
+.login-bx form{
+    display:flex;
+    flex-direction: column;
+    align-items: center;   
+    gap: 20px;
+    width: 80%;
+}
+.login-bx form .form-in{
+    width: 80%;
+    border: none;
+    outline: none;
+    background-color: #F2F2F2;
+    height:40px;
+    border-radius: 4px;
+}
+.login-bx form .form-in::-webkit-input-placeholder {
+     color: #565656;
+}
+.login-bx form .form-btn{
+     width: 80%;
+     background-color: #00D053;
+     border: none;
+     height: 40px;
+     border-radius: 5px;
+     color: white;
+     font-size:large;
+     margin-bottom: 15px;
+     cursor: pointer;
+}
+.login-bx form .form-in:focus{
+     border: 2px solid #000000;
+}
+
+
+/*<-- Admin panel and sidebar CSS --> */
+.mainBody{
+    display: flex;
+    margin: 0;
+}
+.sidebar{
+    width: 15%;
+    background-color: white;
+    height: 100vh;
+    align-items: center;
+}
+.sidebar ul .navLinks{
+    list-style: none;
+    font-size: 1.3rem;
+    margin:30px;
+    color: #000000;
+}
+.sidebar ul  #lastNav{
+    margin-top:400px;
+}
+
+
+.sidebar ul .navLinks a{
+    color: #000000;
+    text-decoration: none;
+}
+.sidebar ul .navLinks a:hover{
+    color: #00D053;
+}
+.salesSection{
+    margin: auto;
+}
+.salesForm{
+    width: 100%;
+    background-color: white;
+}
+.salesForm .R1 .in-R1{
+    outline: none;
+    margin:20px;
+    height: 45px;
+    border:none;
+    background-color: #F2F2F2;
+}
+
+.salesForm .R2 .in-R2{
+    outline: none;
+    height: 45px;
+    margin:20px;
+    border:none;
+    padding-left: 10px;
+    padding-right: 20px;
+    background-color: #F2F2F2;
+}
+.salesForm .R3 .in-R3{
+    outline: none;
+    height: 45px;
+    margin:20px;
+    border:none;
+    padding-left: 10px;
+
+    background-color: #F2F2F2;
+}
+
+.sidebarlink{
+    cursor: pointer;
+    color: #000000;
+}
+
+.sidebarlink:hover{
+    color: #00D053;
+}
+
+
+/* <---- purchase section dropdown css ----> */
+.select{
+    width: 75%;
+    outline: none;
+    border: 1px solid #dee2e6;
+}
+
+.list{
+    width: 19%;
+    /* padding: 5px; */
+    cursor: pointer;
+}
+.option{
+    height: fit-content;
+    padding:5px;
+    background-color:#ffffff;
+    cursor:pointer;
+}
+.option:hover{
+    background-color: #1e90ff;
+    color:white;
+}
+

@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/main.min.css">
+    <link rel="stylesheet" href="../static/css/main.css">
+</head>
+<body class="bg-light">
+    <div class="d-flex">
+        <!-- side bar-->   
+        {% include 'masterSidebar.html' %}
+            
+            <div class="w-100 bg-white m-4 overflow overflow-auto vh-100">
+                <h4 class="text-center text-info m-3">Add Product </h4>
+                <hr>
+                <form class="w-50 m-auto border border-1 p-3 bg-light" action="" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                    <div class="my-3">
+                      <label for="exampleInputEmail1" class="form-label">Enter Product name :</label>
+                      <input type="text" class="form-control focus-ring focus-ring-primary" name="name" id="exampleInputEmail1" aria-describedby="emailHelp" required >
+                    </div>
+                    <div class="my-3">
+                      <label for="exampleInputPassword1" class="form-label">Select Product Image :</label>
+                      <input type="file" class="form-control focus-ring focus-ring-primary" name="image" id="exampleInputPassword1" required>
+                    </div>
+                    <div class="row my-4">
+                        <div class="col">
+                            <!-- <label for="exampleInputPassword1" class="form-label">Select category :</label> -->
+                            <select class="form-select" aria-label="Default select example" name="category" onchange="getProductCat()" id="category" required>
+                                <option selected>select category</option>
+                                <option value="stationary">Stationary</option>
+                                <option value="gifts">Gifts</option>
+                                <option value="cosmetics" >Cosmetics</option>
+                                <option value="general">General</option>
+                                <option value="service">service</option>
+                                <option value="other">other</option>
+                              </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-select" aria-label="Default select example" id="subcategory" name="subcategory" required>
+                                <option>select sub-category</option>
+                              </select>
+                        </div>
+                        <div class="row my-4">
+                            <div class="col">
+                      <label for="exampleInputPassword1" class="form-label"> Reorder Level :</label>
+                              <input type="number" class="form-control" placeholder="Reorder Level" name="reorder_level" aria-label="First name" required>
+                            </div>
+                            <div class="col">
+                      <label for="exampleInputPassword1" class="form-label"> Buying price :</label>
+                              <input type="number" class="form-control" placeholder="Enter Buying Price" name="cost_price" aria-label="Last name" required>
+                            </div>
+                            <div class="col">
+                      <label for="exampleInputPassword1" class="form-label"> Selling price :</label>
+                                <input type="number" class="form-control" placeholder="Enter Selling Price" name="selling_price" aria-label="Last name" required>
+                              </div>
+                          </div>
+                      </div>
+                    <!-- <div class="mb-3 form-check">
+                      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div> -->
+                    <button type="submit" class="btn bg-primary w-100 text-white ">Submit</button>
+                  </form>
+            </div>
+    </div>
+    <script src="../static/js/main.js"></script>
+</body>
+</html>
