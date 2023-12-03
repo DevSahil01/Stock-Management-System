@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add product</title>
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/main.css">
 </head>
@@ -16,7 +16,7 @@
             <div class="w-100 bg-white m-4 overflow overflow-auto vh-100">
                 <h4 class="text-center text-info m-3">Add Product </h4>
                 <hr>
-                <form class="w-50 m-auto border border-1 p-3 bg-light" action="" method="POST" enctype="multipart/form-data">
+                <form class="form w-50 m-auto border border-1 p-3 bg-light" action="" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                     <div class="my-3">
                       <label for="exampleInputEmail1" class="form-label">Enter Product name :</label>
@@ -68,5 +68,6 @@
             </div>
     </div>
     <script src="../static/js/main.js"></script>
+    <script src="../static/js/sidebar.js"></script>
 </body>
 </html>

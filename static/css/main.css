@@ -135,6 +135,10 @@ body{
     border: 1px solid #dee2e6;
 }
 
+.dropdown ul{
+    padding: 0px;
+}
+
 .list{
     width: 19%;
     /* padding: 5px; */
@@ -142,7 +146,7 @@ body{
 }
 .option{
     height: fit-content;
-    padding:5px;
+    padding:3px;
     background-color:#ffffff;
     cursor:pointer;
 }
@@ -150,4 +154,9 @@ body{
     background-color: #1e90ff;
     color:white;
 }
+.sidebar_menu{
+    cursor: pointer;
+}
+
+
 

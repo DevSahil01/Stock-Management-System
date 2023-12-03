@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Purchase</title>
     <link rel="stylesheet" href="../static/css/main.min.css">
     <link rel="stylesheet" href="../static/css/main.css">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
@@ -24,7 +24,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             
-            <form class="w-100 m-auto border border-1 p-3 bg-white" action="" method="POST" enctype="multipart/form-data">
+            <form class="w-100 m-auto border border-1 p-3 bg-white" action="" method="POST" >
                 
                 {% csrf_token %}
                 <div class="row my-4">
@@ -36,35 +36,43 @@
                         <label for="exampleInputPassword1" class="form-label"> Bill no :</label>
                                 <input type="number" class="form-control" placeholder="Enter Bill no" name="bill_no" aria-label="Last name" required>
                             </div>
-                           
-                            <div class="col dropdown1" >
-                                <div >
-                                    <label for="exampleInputPassword1" class="form-label"> select party name :</label>
-                                    <div class="input-group"  >
-                                    <input type="text" readonly value="select party name" class="select rounded-start-2" id="dropdown"  
-                                    data-bs-toggle="collapse" role="button" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" name="party_name" required>
-                                        <span class="input-group-text">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16" id="button">
-                                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                                        </svg>
-                                        </span>
-                                    </div>  
-                                    <div class="collapse position-absolute list"   id="collapseExample">
-                    
-                                        <input type="text" class="form-control mb-2 " id="searchparty"  placeholder="search party name" aria-label="Recipient's username" aria-describedby="button-addon2"
-                                        onkeyup="getSearchOption()"   >
-                                        <ul class="list-group" id="ulist">
-                                          {% for supplier in suppliers  %} 
-                                          <li class="list-group-item option" onclick="selectOption(event)" >{{supplier.name}}</li>
-                                          {% endfor %}
-                                        </ul>
-                                    </div>
-
+                            <div class="col">
+                                <label for="category" class="form-label">Payment method :</label>
+                                <select class="form-select" aria-label="Default select example" name="pay_method" onchange="{GetPayMethod()}" id="pay_method" required>
+                                    
+                                    <option value="cash" selected>cash</option>
+                                    <option value="credits">credits</option>
+                                  </select>
                                 </div>
-                            </div>
+                                <div class="col dropdown" data-bs-theme="light">
+                                <label for="dropdown" class="form-label">Party Name :</label>
+                                    <input type="text" class="d-none" name="party_name" id="party_name" >
+                                    <button class="btn  dropdown-toggle border border-1 w-100" type="button"  data-bs-toggle="dropdown" aria-expanded="false" id="dropdown">
+                                      Select Party
+                                    </button>
+                                    <ul class="dropdown-menu p-2" aria-labelledby="dropdownMenuButtonLight">
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" placeholder="Search party name" id="searchparty"  onkeyup="getSearchOption()"  aria-label="Username" aria-describedby="basic-addon1">
+                                            <span class="input-group-text" id="basic-addon1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                                                  </svg>
+                                            </span>
+                                          </div>
+                                       
+                                        <ul id="ulist" >
+                                        {% for supplier in suppliers  %} 
+                                        <li class="list-group-item option" onclick="selectOption(event)" >{{supplier.name}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                    
+                                    </ul>
+                                  </div>
+                           
+                            
                             
                             </div>
-                            <div class="row my-4">
+                            <div class="row my-4" id="credit-INPUTS">
                                 <div class="col">
                                 <select class="form-select" aria-label="Default select example" name="category" onchange="{getProductCat();getProductSubcat()}" id="category" required>
                                     <option selected>select category</option>
@@ -82,16 +90,31 @@
                                         <option>select sub-category</option>
                                       </select>
                                 </div>
-                                <div class="col">
-                                    <select class="form-select" aria-label="Default select example" name="item_name"  id="item_name"  required>
+                                <div class="col input-group mb-3">
+                                    
+                                    <input type="number" class="outline-none border border-1 rounded-start w-25 focus-ring " id="item_ID" >
+                                    
+                                    <select class="form-select" id="item_name"  name="item_name"  onchange="setCPSP()"  required >
+                                        {% for item in itemdata %}
+                                        <option data-cat="{{item.category}}" data-subcat="{{item.subcategory}}" data-sp="{{item.selling_price}}" data-cp="{{item.cost_price}}"
+                                        value="{{item.name}}" class="options" >{{item.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                  </div>
+                                  
+
+                                
+                                <!-- <div class="col">
+                                    <select class="form-select" aria-label="Default select example">
                                         <option value=""  selected>Select Item</option>
                              
                                      {% for item in itemdata %}
-                                     <option data-cat="{{item.category}}" data-subcat="{{item.subcategory}}"
+                                     <option data-cat="{{item.category}}" data-subcat="{{item.subcategory}}" data-sp="{{item.selling_price}}"
                                      value="{{item.name}}" class="options">{{item.name}}</option>
                                      {% endfor %}
                                     </select>
-                                </div>
+                                </div> -->
+                                
                             </div>
                             <div class="row my-4">
                                 <div class="col">
@@ -111,43 +134,56 @@
                                             <input type="number" name="total" class="form-control" placeholder="total" aria-label="last name" disabled>
                                         </div>
                             </div>
-                            <div class="row">
+                            <div class="row d-none" id="credit_row">
                                         <div class="col">
                                             <label for="exampleInputPassword1" class="form-label">Amount Paid :</label>
-                                                <input type="number" class="form-control" placeholder="Enter amount paid" name="amount_paid" aria-label="Last name" id="main_amt" required>
+                                                <input type="number" class="form-control" placeholder="Enter amount paid" name="amount_paid" aria-label="Last name" id="main_amt" >
                                         </div>
                                         <div class="col">
                                             <label for="exampleInputPassword1" class="form-label">Payable Amount:</label>
-                                                <input type="number" class="form-control" placeholder="Enter payable amount" name="payable_amount" aria-label="Last name" id="pay_amt" required>
+                                                <input type="number" class="form-control" placeholder="Enter payable amount" name="payable_amount" aria-label="Last name" id="pay_amt" >
                                         </div>
                                         <div class="col">
                                             <label for="exampleInputPassword1" class="form-label">Due Date:</label>
-                                                <input type="date" class="form-control" placeholder="Enter Due Date" name="due_date" aria-label="Last name" required>
+                                                <input type="date" class="form-control" placeholder="Enter Due Date" name="due_date" aria-label="Last name" >
                                         </div>
                                 
-                            <div class="row justify-content-sm-end my-3">
-                                <button type="submit" class="btn btn-primary text-white w-25">Submit</button>
-                            </div>
-                           
-                            </div>
+                                        
+                                    </div>
+                                    <div class="row justify-content-sm-end my-3">
+                                        <button type="submit" class="btn btn-primary text-white w-25" id="submit">Submit</button>
+                                    </div>
 
             </form>
-            <h4 class="text-center m-2">Purchase Data</h4>
-            <table class="table w-100  mb-4 table-bordered">
-                <thead >
-                  <tr >
-                    <th scope="col" >Bill no</th>
-                    <th scope="col">Party Name</th>
-                    <th scope="col">Date</th>
+            <div class="container p-2 bg-white my-2">
+                <div class="d-flex gap-5">
+                <h3 class="fs-5 fw-semibold">Purchase Summary</h3>
+                <form action="" method="GET" name="filter">
+                <select name="v" class="form-select" onchange='{filter.submit()}'  >
+                    <!--this.form.submit() or we can submit with id name of name attribute of form-->
+                    <option selected>filter</option>
+                    <option value="pay" >payable</option>
+                    <option value="all" >all</option>
+                </select>
+            </form>
+            <p id="length">No of purchase entries<span>{{datalength}}</span> </p>
+            </div>
+                <hr>
+                <table class="table w-100 bg-white mb-4 table-hover table-lg table-bordered" id="data">
+                    <thead  >
+                  <tr>
+                    <th scope="col" class="bg-warning bg-opacity-50">Bill no</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Party Name</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Date</th>
                     <!-- <th scope="col">Category</th> -->
-                    <th scope="col">Name of Item</th>
-                    <th scope="col">Quantity</th>
+                    <th scope="col" class="w-25 bg-warning bg-opacity-50">Name of Item</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Quantity</th>
                     <!-- <th scope="col">Rate Per Item</th> -->
-                    <th scope="col">Total</th>
-                    <th scope="col">Paid</th>
-                    <th scope="col">Payable</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Total</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Paid</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Payable</th>
                     <!-- <th scope="col">Payment mode</th> -->
-                    <th scope="col">Expected Payment Dates</th>
+                    <th scope="col" class="bg-warning bg-opacity-50">Expected Payment Dates</th>
 
                     
                     
@@ -156,9 +192,9 @@
                 </thead>
                 <tbody>
                   {% for purchase in purchasedata %}
-                  <tr>
+                  <tr id="purchase" >
                       {% for p in purchase %}
-                        <td scope="row">{{p}}</td>
+                        <td scope="row" >{{p}}</td>
                     {% endfor %}
                   </tr>
                   {% endfor  %}
@@ -176,6 +212,15 @@
                   </tr> -->
                 </tbody>
               </table>
+            </div>
+            <div class="mx-auto  w-100  d-flex justify-content-sm-end">
+                <nav aria-label="Page navigation example">
+                  <ul class="pagination" id="pur_pagination">
+                    
+                  
+                  </ul>
+                </nav>
+              </div>
         </div>
         
     </div>
@@ -188,8 +233,8 @@
     <script src="../static/js/dropdown.js"></script>
 
     <script src="../static/js/main.js" type="text/javascript">
-
     </script>
+    <script src="../static/js/pagination.js" type="text/javascript"></script>
 
 </body>
 </html>

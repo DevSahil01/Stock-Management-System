@@ -69,7 +69,7 @@ def customerSection(request):
     if request.method=="POST":
         cust_name=request.POST['cust_Name']
         cust_mob=request.POST['cust_mob']
-        cust_aadhar=request.POST['cust_aadhar']
+        cust_add=request.POST['cust_add']
         alreadyExists=False
         for cust in custData:
             if(cust.name==cust_name):
@@ -78,7 +78,7 @@ def customerSection(request):
         if alreadyExists==False:
             try:
                 with connection.cursor() as cursor:
-                    cursor.execute("INSERT INTO customer(name,mobile,addhar_no) VALUES (%s,%s,%s)",[cust_name,cust_mob,cust_aadhar])
+                    cursor.execute("INSERT INTO customer(name,mobile,address) VALUES (%s,%s,%s)",[cust_name,cust_mob,cust_add])
                 return redirect('masterpanel')
             except:
                 return render(request,'customer.html',{'message':"Server Error",'customerData':custData})
@@ -120,9 +120,17 @@ def supplierSection(request):
 
 @login_required(login_url='index')   
 def productsPage(request):
+        PN=1#page no
+
+        try:
+            PN=request.GET['p']
+        except:
+            PN=1
+        EC=10*int(PN)#End count
+        IC=EC-9#initial count
         itemData=Items.objects.all()
         print(settings.MEDIA_URL)
-        return render(request,'product.html',{'itemData':itemData,'media_url':settings.MEDIA_URL})
+        return render(request,'product.html',{'itemData':itemData[IC-1:EC-1],'media_url':settings.MEDIA_URL,'datalength':len(itemData)})
 
 @login_required(login_url='index')
 def addProduct(request):
@@ -139,6 +147,7 @@ def addProduct(request):
 def purchaseSection(request):
     if request.method=="POST":
         date=request.POST['date']
+        pay_method=request.POST['pay_method']
         billno=request.POST['bill_no']
         party_name=request.POST['party_name']
         p_name=request.POST['item_name']
@@ -148,46 +157,111 @@ def purchaseSection(request):
         amount_paid=request.POST['amount_paid']
         payable_amount=request.POST['payable_amount']
         due_date=request.POST['due_date']
+        if pay_method=='cash':
+            amount_paid=int(quantity)*int(cost_price)
+            payable_amount=0
+
         with connection.cursor() as cursor:
             cursor.execute('CALL InsertPurchase(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',[party_name,p_name,billno,date,quantity,cost_price,selling_price,amount_paid,payable_amount,due_date])
             return redirect('purchase')
 
     else:
-        suppliers=Supplier.objects.all()
-        #other ways entries.objects.values(<column_name>)
-        #other ways entries.objects.values_list(<column_name>)
-        itemData=Items.objects.only('name')
-        with connection.cursor() as cursor:
-            cursor.execute('''SELECT p.bill_no,s.name,p.Date,i.name,p.quantity,p.amount,pd.paid,cd.payable,cd.due_date
-FROM purchase p
-JOIN supplier s ON s.id=p.supplier_id
-JOIN items i on i.id=p.item_id
-JOIN paid pd on pd.purchase_id=p.id
-JOIN creditors cd ON cd.purchase_id=p.id''')
-            purchaseData=cursor.fetchall()
-            for p in purchaseData:
-                print(p)
+        filter='all'
+        PN=1#page no
 
-        return render(request,'purchase.html',{'suppliers':suppliers,'itemdata':list(itemData),'purchasedata':purchaseData})
+        try:
+            filter=request.GET['v']
+            PN=request.GET['p']
+        except:
+            filter='all'
+            PN=1
+        EC=10*int(PN)#End count
+        IC=EC-9#initial count
+        print(IC,EC,PN)
+
+        suppliers=Supplier.objects.all()
+        itemData=Items.objects.all()
+        if filter=='all':
+
+            #other ways entries.objects.values(<column_name>)
+            #other ways entries.objects.values_list(<column_name>)
+            with connection.cursor() as cursor:
+                cursor.execute('''SELECT p.bill_no,s.name,p.Date,i.name,p.quantity,p.amount,pd.paid,cd.payable,cd.due_date
+                    FROM purchase p
+                    JOIN supplier s ON s.id=p.supplier_id
+                    JOIN items i on i.id=p.item_id
+                    JOIN paid pd on pd.purchase_id=p.id
+                    JOIN creditors cd ON cd.purchase_id=p.id ''')
+                purchaseData=cursor.fetchall()
+                # for p in purchaseData:
+                #     print(p)
+            return render(request,'purchase.html',{'suppliers':suppliers,'itemdata':list(itemData),'purchasedata':purchaseData[IC-1:EC-1],'datalength':len(purchaseData)})
+        else:
+            with connection.cursor() as cursor:
+                cursor.execute('''SELECT p.bill_no,s.name,p.Date,i.name,p.quantity,p.amount,pd.paid,cd.payable,cd.due_date
+                    FROM purchase p
+                    JOIN supplier s ON s.id=p.supplier_id
+                    JOIN items i on i.id=p.item_id
+                    JOIN paid pd on pd.purchase_id=p.id
+                    JOIN creditors cd ON cd.purchase_id=p.id ORDER BY cd.payable DESC''')
+                purchaseData=cursor.fetchall()
+                # for p in purchaseData:
+                #     print(p)
+            return render(request,'purchase.html',{'suppliers':suppliers,'itemdata':list(itemData),'purchasedata':purchaseData[IC-1:EC-1],'datalength':len(purchaseData)})
+
+
+
 
 # @login_required(login_url='index')
 def salesSection(request):
+    customers=Customer.objects.all()
+    itemData=Items.objects.only('name')
+    PN=1#page no
+    try:
+            PN=request.GET['p']
+    except:
+            PN=1
+    EC=10*int(PN)#End count
+    IC=EC-9#initial count
+    print(IC,EC,PN)
     if request.method=="POST":
-        date=request.POST['date']
-        billno=request.POST['bill_no']
-        cust_name=request.POST['cust_name']
-        p_name=request.POST['item_name']
-        quantity=request.POST['quantity']
-        selling_price=request.POST['selling_price']
-        amt_recieved=request.POST['amt_recieved']
-        receivable_amt=request.POST['receivable_amt']
-        due_date=request.POST['due_date']
-        with connection.cursor() as cursor:
-            cursor.execute("CALL InsertSales(%s, %s, %s, %s, %s, %s, %s,%s);",[cust_name,p_name,date,quantity,selling_price,amt_recieved,receivable_amt,due_date])
-            return redirect('salespage')
+        try:
+            startdate=request.POST['start_date']
+            endDate=request.POST['end_date']
+            with connection.cursor() as cursor:
+                cursor.execute('''SELECT s.id,c.name,s.Date,i.name,s.quantity,s.amount,rd.received,db.receivable,db.due_date
+                FROM sales s
+                JOIN customer c ON c.id=s.customer_id
+                JOIN items i on i.id=s.item_id
+                JOIN received rd on rd.sales_id=s.id
+                JOIN debtors db ON db.sales_id=s.id BETWEEN %s AND %s''',[startdate,endDate])
+            salesData=cursor.fetchall()
+            return render(request,'sales.html',{'customers':customers,
+                                                'itemdata':itemData,
+                                                'salesdata':salesData})
+
+        except Exception as e:
+            
+            date=request.POST['date']
+            pay_method=request.POST['pay_method']
+            billno=request.POST['bill_no']
+            cust_name=request.POST['cust_name']
+            p_name=request.POST['item_name']
+            quantity=request.POST['quantity']
+            selling_price=request.POST['selling_price']
+            amt_recieved=request.POST['amt_recieved']
+            receivable_amt=request.POST['receivable_amt']
+            due_date=request.POST['due_date']
+
+
+            if pay_method=='cash':
+                amt_recieved=int(quantity)*int(selling_price)
+                receivable_amt=0
+            with connection.cursor() as cursor:
+                cursor.execute("CALL InsertSales(%s, %s, %s, %s, %s, %s, %s,%s);",[cust_name,p_name,date,quantity,selling_price,amt_recieved,receivable_amt,due_date])
+                return redirect('salespage')
     else:
-        customers=Customer.objects.all()
-        itemData=Items.objects.only('name')
+        
         with connection.cursor() as cursor:
             cursor.execute('''SELECT s.id,c.name,s.Date,i.name,s.quantity,s.amount,rd.received,db.receivable,db.due_date
             FROM sales s
@@ -198,7 +272,8 @@ def salesSection(request):
         salesData=cursor.fetchall()
         return render(request,'sales.html',{'customers':customers,
                                             'itemdata':itemData,
-                                            'salesdata':salesData})
+                                            'salesdata':salesData[IC-1:EC-1],
+                                             'datalength':len(salesData)})
 
 @login_required(login_url='index')
 def serviceSection(request):

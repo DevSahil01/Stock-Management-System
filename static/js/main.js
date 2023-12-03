@@ -1,5 +1,5 @@
 const productSubCat={
-    'stationary':['pencil','eraser','geometry box','sharpner','pen'],
+    'stationary':['pencil','eraser','geometry box','sharpner','pen','notebook'],
     'gifts':['toys','articles','idol'],
     'service':['xerox','project','print'],
     'cosmetics':['neckless','makeup'],
@@ -159,10 +159,10 @@ itemDataObj={}
 if(itemData){
 
     for( item of itemData.children){
-        Object.assign(itemDataObj,{[item.value]:[item.getAttribute('data-cat'),item.getAttribute('data-subcat')]})
+        Object.assign(itemDataObj,{[item.value]:[item.getAttribute('data-cat'),item.getAttribute('data-subcat'),item.getAttribute('data-cp'),item.getAttribute('data-sp')]})
      }
 }
-
+console.log(itemDataObj)
 
 
 function getProductSubcat(){
@@ -171,7 +171,6 @@ function getProductSubcat(){
     
     itemFilterList=[]
     
-
     for(item of Object.keys(itemDataObj)){
         // console.log(itemDataObj[item].includes(subcatOpt))
         if(itemDataObj[item].includes(subcatOpt) && itemDataObj[item].includes(p_cat)){
@@ -186,7 +185,8 @@ function getProductSubcat(){
         for(item of itemFilterList){
             itemData.insertAdjacentHTML('beforeend',
             ` <option data-cat="${itemDataObj[item][0]}" data-subcat="${itemDataObj[item][1]}"
-            value="${item}" class="options">${item}</option>`)
+            data-sp="${itemDataObj[item][3]}" data-cp="${itemDataObj[item][2]}"
+            value="${item}" class="options" >${item}</option>`)
         }
     }
     else{
@@ -194,44 +194,88 @@ function getProductSubcat(){
     }
 
 }
+function setCPSP(e){
+     let item_ID=document.getElementById('item_name').selectedIndex
+     let cp=document.getElementsByName('cost_price')[0]
+     let sp=document.getElementsByName('selling_price')[0]
+     let options=document.getElementsByClassName('options')
+     if(cp){
+         cp.value=options[item_ID-1].getAttribute('data-cp')
+     }
+     sp.value=options[item_ID-1].getAttribute('data-sp')
+}
 
 
 function getDate(){
     var today=new Date()
- document.getElementById('date_in').value=today.getFullYear()+"-"+today.getMonth()+"-"+today.getDate()
+    var day=today.getDate()
+    if(parseInt(day)<10){
+        day='0'+day
+    }
+    console.log((today.getMonth()+1)+"-"+today.getFullYear()+"-"+day)
+    document.getElementById('date_in').value=today.getFullYear()+"-"+(today.getMonth()+1)+"-"+day
 }
+
+function GetPayMethod(){
+    let pay_method=document.getElementById('pay_method').options[document.getElementById('pay_method').selectedIndex].value
+    let credit_row=document.getElementById('credit_row')
+    if(pay_method==='credits'){
+         credit_row.classList.remove('d-none')
+    }
+    else{
+        credit_row.classList.add('d-none')
+    }
+}
+
+
+
+
 
 function showTotal(){
     let quantity=0
-    let price=0
+    let priceTag=document.getElementById('price')
+    let price=priceTag
     
     document.getElementsByName('quantity')[0].addEventListener('keyup',(e)=>{
         quantity=e.target.value
     })
-    document.getElementById('price').addEventListener('keyup',(e)=>{
-        price=e.target.value
-    })
+    
+    priceTag.addEventListener('keyup',(e)=>{
+            price=e.target.value
+        })
 
    document.onclick=function(){
-     document.getElementsByName('total')[0].value=quantity*price
+     document.getElementsByName('total')[0].value=quantity*priceTag.value
    }
 
+   let pay_method=document.getElementById('pay_method').options[document.getElementById('pay_method').selectedIndex].value
+   let main_amt=document.getElementById('main_amt')
+  
+   
+    main_amt.addEventListener('keyup',(e)=>{
+          let payable_amount=document.getElementsByName('total')[0].value-e.target.value
+          
+             if(payable_amount>=0){
+                 document.getElementById('pay_amt').value=payable_amount;
+             }
+             else{
+                showAlert("The paid amount should not be greater than total",'warning')
+                document.getElementById('pay_amt').value=0;
+             }
+          
+    })
 
-   document.getElementById('main_amt').addEventListener('keyup',(e)=>{
-     let payable_amount=document.getElementsByName('total')[0].value-e.target.value
-     if(payable_amount>=0){
-         document.getElementById('pay_amt').value=payable_amount;
-     }
-     else{
-        showAlert("The paid amount should not be greater than total",'warning')
-        document.getElementById('pay_amt').value=0;
-     }
-     
-     
-   })
 
 }
 showTotal()
+
+
+// function showtableInsight(){
+    
+// }
+// showtableInsight()
+
+
 
 
 

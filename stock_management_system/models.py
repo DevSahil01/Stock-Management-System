@@ -11,7 +11,7 @@ User=get_user_model()
 class Customer(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     mobile = models.CharField(max_length=12, blank=True, null=True)
-    addhar_no = models.IntegerField(blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
         managed = False
