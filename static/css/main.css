@@ -157,6 +157,10 @@ body{
 .sidebar_menu{
     cursor: pointer;
 }
+.dropMenu{
+    height: 150px;
+    overflow-y: auto;
 
+}
 
 

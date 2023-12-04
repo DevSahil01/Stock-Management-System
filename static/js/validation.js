@@ -15,21 +15,6 @@ function checkMobileNo(){
 }
 checkMobileNo()
 
-function checkAadharNo(){
-    aadharField=document.getElementById('aadhar')
-    if (aadharField){
-
-        aadharField.addEventListener('keyup',(e)=>{
-            if(e.target.value.length>12){
-                document.getElementById('aadhar_warning').innerText='Aadhar no should not be greater than 12 Digits'
-            }
-            else{
-                document.getElementById('aadhar_warning').innerText=''
-            }
-        })
-    }
-}
-checkAadharNo()
 
 
 

@@ -20,7 +20,7 @@ def adminLogin(request):
         username=request.POST['username']
         password=request.POST['password']
         branch=request.POST['branch']
-        print(username,password)
+        
         
         # user=User.objects.create_user(username=username,password=password,is_staff=True)
         # user.save()
@@ -39,13 +39,13 @@ def adminLogin(request):
 def masterLogin(request):
     masterCredentials={
         "Andheri(E)":{
-            "username":"sahil",
+            "username":"nilesh",
             "password":"1234",
         }
         ,
         "Andheri(W)":{
-            "username":"vivek",
-            "password":"4567"
+            "username":"janvi",
+            "password":"12345"
         }
     }
     if request.method=="POST":
@@ -308,7 +308,6 @@ def serviceSales(request):
         date=request.POST['date']
         cust_name=request.POST['cust_name']
         ser_name=request.POST['service_name']
-        quantity=request.POST['quantity']
         selling_price=request.POST['selling_price']
         amt_recieved=request.POST['amt_recieved']
         receivable_amt=request.POST['receivable_amt']
@@ -341,9 +340,12 @@ def alertsSection(request):
        debatorAlerts=cursor.fetchall()
        cursor.execute('SELECT svc.name, c.name, c.mobile,  s.Date, d.receivable, d.due_date FROM debtors d JOIN service_sales s ON s.id=d.service_id JOIN service svc ON svc.id=s.service_id JOIN customer c ON c.id=s.customer_id WHERE DATE(due_date) BETWEEN CURDATE() AND CURDATE() + INTERVAL 3 DAY;')
        serviceSalesAlerts=cursor.fetchall()
+       cursor.execute('SELECT i.name,i.reorder_level,s.quantity FROM items i JOIN stock s ON i.id=s.item_id WHERE s.quantity<i.reorder_level;')
+       reorderAlerts=cursor.fetchall()
     return render(request,'alerts.html',{'creditoralerts':creditorAlerts,
                                          'debtoralerts':debatorAlerts,
-                                         'servicesalesAlerts':serviceSalesAlerts})
+                                         'servicesalesAlerts':serviceSalesAlerts,
+                                         'reorder_alerts':reorderAlerts})
 
 def logout(request):
     auth.logout(request)

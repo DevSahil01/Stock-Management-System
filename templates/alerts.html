@@ -58,7 +58,7 @@
                   </tbody>
                 </table>
                 
-                <h4 class="text-center">Service Sales Alerts</h4>
+                <h4 class="text-center">Reorder Alerts</h4>
                 <table class="table w-75 mx-auto table-bordered mb-4">
                     <thead>
                       <tr>
@@ -81,7 +81,29 @@
                       
                     </tbody>
                   </table>
+                  <h4 class="text-center">Reorder Level Alerts</h4>
+                  <table class="table w-75 mx-auto table-bordered mb-4">
+                      <thead>
+                        <tr>
+                          <th scope="col">Product Name</th>
+                          <th scope="col">Reorder Level</th>
+                          <th scope="col">Quantity</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for alerts in reorder_alerts %}
+                          <tr>
+                              {% for alert in alerts %}
+                              <td scope="row">{{alert}}</td>
+                              {% endfor %}
+                          </tr>
+                          {% endfor %}
+                        
+                      </tbody>
+                    </table>
         </div>
     </div>
+    <script src="../static/js/sidebar.js" ></script>
 </body>
 </html>

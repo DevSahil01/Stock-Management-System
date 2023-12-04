@@ -19,11 +19,14 @@ function myFunction(x) {
        if (document.getElementsByClassName('form')[0])document.getElementsByClassName('form')[0].classList.replace('w-50','w-100')
        sidebar.classList.add('position-absolute')
        menu.classList.add('position-absolute')
-       collpaseSideBar()
+       if(menu.src=closeIcon){
+
+          collpaseSideBar()
+       }
     } else {
         if (document.getElementsByClassName('form')[0])document.getElementsByClassName('form')[0].classList.replace('w-100','w-50')
         sidebar.classList.remove('position-absolute')
-       menu.classList.remove('position-absolute')
+      //  menu.classList.remove('position-absolute')
     }
   }
   
