@@ -2,13 +2,16 @@ Stock Management System
 This is a Stock Management System built with Python and Django to manage purchase and sales entries for a real-time store. 
 The system allows users to handle inventory, track stock levels, and manage sales and purchases efficiently.
 
-Features
+
+Features: 
 User Authentication: Secure user authentication and authorization.
 Product Management: Add, edit, and delete products.
 Purchase Management: Create and manage purchase entries.
 Sales Management: Create and manage sales entries.
 Inventory Tracking: Real-time tracking of stock levels.
 Reporting: Generate reports on sales, purchases, and inventory levels.
+
+
 Technologies Used
 Python 3.x
 Django 3.x
@@ -16,6 +19,9 @@ SQLite3 (default database)
 HTML/CSS
 JavaScript
 Bootstrap 4 (for frontend styling)
+
+
+
 Installation
 Prerequisites
 Python 3.x installed on your machine.
@@ -66,5 +72,9 @@ Create a new branch: git checkout -b feature-branch-name
 Make your changes and commit them: git commit -m 'Add some feature'
 Push to the branch: git push origin feature-branch-name
 Open a pull request.
+
+
+
+
 License
 This project is licensed under the MIT License - see the LICENSE file for details.
